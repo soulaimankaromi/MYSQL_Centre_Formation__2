@@ -1,0 +1,45 @@
+mysql> select * from etudiant;
+
+select * from session;
+
+select * from formation;
+
+select distinct session.nomSess,session.dateDebut,session.datefin,formation.tittreform from session
+    -> Join  formation on session.codeforme = formation.codeforme;
+
+
+select * from  inscription;
+
+
+select distinct inscription.num_cine,etudiant.nom,etudiant.prenom, formation.tittreform
+    -> from etudiant
+    -> join inscription on etudiant.num_cin = inscription.num_cine
+    -> join session on  inscription.code = session.code
+    -> join formation on session.codeforme = formation.codeforme
+    -> ORDER By formation.tittreform;
+
+
+select COUNT(typeCours) as Nb_Ins from inscription
+    -> join session on  inscription.code = session.code
+    -> join formation on session.codeforme = formation.codeforme
+    -> where formation.tittreform = 'web developpment';
+
+
+
+select formation.tittreform,COUNT(typeCours) as Nb_Ins from inscription
+    -> join session on  inscription.code = session.code
+    -> join formation on session.codeforme = formation.codeforme
+    ->  where  inscription.typeCours = 'Distanciel'
+    -> GROUP BY formation.tittreform
+    -> HAVING COUNT(*) >= 3
+    -> ORDER BY  Nb_Ins;
+
+
+select formation.tittreform,formation.dureeform,formation.prixforme,catalogue.codeform
+    -> from catalogue
+    ->  join formation on catalogue.codeform = formation.codeforme
+    ->  where  catalogue.codespec in (select distinct codespec from catalogue)
+    -> ORDER BY  catalogue.codespec DESC, formation.tittreform;
+
+
+
